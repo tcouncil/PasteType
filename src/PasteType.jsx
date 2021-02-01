@@ -1,30 +1,41 @@
-import React, { useState } from "react";
+import React from "react";
 import "./pasteType.css";
 
-export default function PasteType({
-  pastedText = "",
-  setStartedTyping
-}) {
+export default function PasteType({ pastedText = "", setReady }) {
   const textTyper = document.getElementById("TextTyper");
   const typedText = document.getElementById("TextTyped");
   let pasteText = pastedText;
 
   const handleReset = (e) => {
-    setStartedTyping(false);
+    const textArea = document.querySelector(".pasted");
+    setReady(false);
     pasteText = "";
+    textArea.value = "";
     textTyper.innerText = "";
     typedText.innerText = "";
-  }
+  };
+
+  const handleReady = (e) => {
+    setReady(true);
+  };
 
   return (
     <>
       <div className="row">
-        <button className="btn" onClick={handleReset}>Reset</button>
+        <button className="btn col-6" onClick={handleReady}>
+          Ready
+        </button>
+        <button className="btn col-6" onClick={handleReset}>
+          Reset
+        </button>
       </div>
-      <div className="row">
+      <div className="row" id="PasteTypeTexer">
         <div id="TypedText">
-          <code className="col-6" id="TextTyped" />
-          <code className="col-6 text-no-wrap" id="TextTyper">{pasteText}</code>
+          <code className="col" id="TextTyped" />
+          <code id="TheChar" />
+          <code className="col-6" id="TextTyper">
+            {pasteText}
+          </code>
         </div>
       </div>
     </>

@@ -1,11 +1,9 @@
 import React from "react";
 
-export default function TextArea({handleText, startedTyping, pastedText}) {
+export default function TextArea({handleText, ready}) {
   return (
     <div className="row" id="PastedText">
-      {startedTyping ? <code className="pastedCode">{pastedText}</code> 
-      : <textarea className="pasted" placeholder="Paste Text Here" readOnly={startedTyping} onChange={handleText}></textarea> }
-      
+      <textarea className="pasted" placeholder="Paste Text Here" readOnly={ready} onChange={handleText} onClick={handleText}></textarea>
     </div>
   );
 }
