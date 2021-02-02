@@ -1,5 +1,5 @@
 body {
-  background-color: black;
+  background-color: rgb(24, 15, 48);
 }
 
 h1 {
@@ -7,25 +7,31 @@ h1 {
 }
 
 .pasted {
-  background-color: rgb(0, 0, 0);
-  color: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255, 0.5);
+  color: rgb(0, 0, 0);
 }
 
 .pastedCode {
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(0, 0, 0, 0);
   color: rgb(255, 255, 255);
 }
 
 .Ready {
-  background-color: rgb(0, 0, 0);
-  color: rgb(75, 75, 75);
+  background-color: rgb(0, 0, 0, 0.5);
+  color: rgba(171, 255, 138, 0.637);
 }
 
 .Space {
-  width: 20px;
+  width: 22px;
+  height: 38px;
   border-bottom: Solid 2px gray;
 }
-
+.SpaceLeft{
+  padding-left: 22px !important;
+}
+.end{
+  display: none;
+}
 #Typer {
   background-color: rgb(0, 0, 0);
   color: rgb(255, 255, 255);
@@ -37,12 +43,12 @@ h1 {
   text-overflow: none;
   color: rgb(0, 0, 0);
   font-size: 22px;
-  font-weight: 900;
+  font-weight: 800;
   text-align: left;
   margin-right: 0 !important;
   margin-left: 0 !important;
   padding-right: 0 !important;
-  padding-left: 0 !important;
+  padding-left: 0;
   max-width: 50%;
   background: linear-gradient( 90deg, rgba(255, 255, 255, 0.71), rgba(255, 255, 255, 0.35));
 }
@@ -59,8 +65,8 @@ h1 {
   margin-left: 0 !important;
   padding-right: 3px !important;
   padding-left: 3px !important;
-  max-width: 10%;
-  border: solid 1px white;
+  max-width: 6%;
+  border: solid 2px white;
   background: rgb(180,180,180);
   background: radial-gradient(circle, rgba(180,180,180,1) 0%, rgba(215,215,215,1) 60%, rgba(255,255,255,1) 100%);
 }
@@ -71,7 +77,8 @@ h1 {
   text-overflow: none;
   color: rgb(0, 0, 0);
   font-size: 22px;
-  font-weight: 900;
+  font-weight: 800;
+  max-width: 50%;
   text-align: right !important;
   margin-right: 0 !important;
   margin-left: 0 !important;
@@ -89,6 +96,15 @@ h1 {
   padding-left: 0 !important;
 }
 
-#PasteTypeTexer {
-  border: solid 1px white;
+#PasteTypeTexter {
+  border: solid 1px rgb(255, 232, 128);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+	z-index: 10;
+}
+#PasteTypeTexter.Over {
+  display: none;
+}
+
+.btn{
+  color:white;
 }

@@ -19,14 +19,18 @@ function App() {
     ready = bool;
     if (bool) {
       textArea.classList.add("Ready");
+      theChar.innerText = textTyper.innerText[0];
+      textTyper.innerText = textTyper.innerText.slice(1);
     }
-    else
+    else{
       textArea.classList.remove("Ready");
+      theChar.classList.remove("end")
+      theChar.innerText= "";
+      document.getElementById("PasteTypeTexter").classList.remove("Over");
+    }
     if (!startedTyping) {
       pasteText = pastedText;
       textArr = pastedText.split("");
-      theChar.innerText = textTyper.innerText[0];
-      textTyper.innerText = textTyper.innerText.slice(1);
     }
   }
 
@@ -62,11 +66,17 @@ window.addEventListener("keydown", (e) => {
     if (!startedTyping) {
       startedTyping = true;
     }
-
+    if(textTyper.innerText[0] === undefined){
+      theChar.innerText = "end."
+      theChar.classList.add("end");
+      document.getElementById("PasteTypeTexter").classList.add("Over");
+      return;
+    }
     if (spaceMode) {
       textTyped.innerText += theChar.innerText;
       theChar.innerText = "";
       theChar.classList.add("Space");
+      textTyper.classList.remove("SpaceLeft");
       if (e.key.charCodeAt(0) === 32) {
         theChar.classList.remove("Space");
         theChar.innerText = textTyper.innerText[0];
@@ -80,6 +90,7 @@ window.addEventListener("keydown", (e) => {
         if (nextChar === ' ') {
           spaceMode = true;
           theChar.innerText = textTyper.innerText[0];
+          textTyper.classList.add("SpaceLeft");
         } else {
           theChar.innerText = textTyper.innerText[0];
         }
@@ -88,7 +99,7 @@ window.addEventListener("keydown", (e) => {
 
         if (theChar === undefined)
           theChar.innerText = "";
-        if (textTyped.innerText.length >= 30) {
+        if (textTyped.innerText.length >= 15) {
           const textTypedArr = textTyped.innerText.split("");
           textTypedArr.shift();
           textTyped.innerText = textTypedArr.join("");

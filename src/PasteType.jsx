@@ -29,11 +29,11 @@ export default function PasteType({ pastedText = "", setReady }) {
           Reset
         </button>
       </div>
-      <div className="row" id="PasteTypeTexer">
+      <div className="row" id="PasteTypeTexter">
         <div id="TypedText">
           <code className="col" id="TextTyped" />
           <code id="TheChar" />
-          <code className="col-6" id="TextTyper">
+          <code className="col" id="TextTyper">
             {pasteText}
           </code>
         </div>
