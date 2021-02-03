@@ -41,8 +41,8 @@ mark{
 
 .Space {
   width: 50px !important;
-  height: 112px !important;
-  border-bottom: Solid 2px gray;
+  color: rgb(23,23,23, .5);
+  
 }
 .SpaceLeft{
   padding-left: 50px !important;
@@ -102,6 +102,9 @@ mark{
   animation-duration: 0.5s;
   animation-iteration-count: infinite;
 }
+#TheChar.Space{
+  display: none;
+}
 
 @keyframes Character{
   0%{
@@ -125,8 +128,6 @@ mark{
     font-weight: 1000;
   }
 }
-
-
 #TextTyped {
   white-space: nowrap;
   overflow: hidden;

@@ -1,7 +1,7 @@
 import React from "react";
 import "./pasteType.css";
 
-export default function PasteType({ pastedText = "", setReady , readyTyper}) {
+export default function PasteType({ pastedText = "", setReady, readyTyper }) {
   const textTyper = document.getElementById("TextTyper");
   const typedText = document.getElementById("TextTyped");
   let pasteText = pastedText;
@@ -9,28 +9,28 @@ export default function PasteType({ pastedText = "", setReady , readyTyper}) {
 
   const handleReset = (e) => {
     const textArea = document.querySelector(".pasted");
-    document.getElementById("ReadyButton").classList.remove('end');
+    document.getElementById("ReadyButton").classList.remove("end");
     document.getElementById("StartTyping").classList.remove("end");
-    document.querySelector("body").classList.remove("PlayingBody")
-    
+    document.querySelector("body").classList.remove("PlayingBody");
+
     setReady(false);
-    if(textTyper){
-    pasteText = "";
-    textArea.value = "";
-    textTyper.innerText = "";
-    typedText.innerText = "";
+    if (textTyper) {
+      pasteText = "";
+      textArea.value = "";
+      textTyper.innerText = "";
+      typedText.innerText = "";
     }
   };
 
   const handleReady = (e) => {
     setReady(true);
-    document.getElementById("ReadyButton").classList.add('end');
+    document.getElementById("ReadyButton").classList.add("end");
     document.querySelector("body").classList.add("PlayingBody");
-    if(document.querySelector(".pasted").value.length === 0){
+    if (document.querySelector(".pasted").value.length === 0) {
       const theChar = document.getElementById("TheChar");
-      theChar.innerText = 'i';
-      
-        document.getElementById("TextTyper").innerText = "nput text!"
+      theChar.innerText = "i";
+
+      document.getElementById("TextTyper").innerText = "nput text!";
     }
   };
 
@@ -47,9 +47,11 @@ export default function PasteType({ pastedText = "", setReady , readyTyper}) {
       <div className="row end" id="PasteTypeTexter">
         <div id="TypedText">
           <code className="col" id="TextTyped" />
-          <mark><code id="TheChar" /></mark>
+          <mark>
+            <code id="TheChar" />
+          </mark>
           <code className="col" id="TextTyper">
-            {pasteText} 
+            {pasteText}
           </code>
         </div>
       </div>

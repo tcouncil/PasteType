@@ -4,7 +4,7 @@ export default function Stats({startedTyping, ready, accurateKeystrokes, keystro
   return (
     <div className="row text-center" id="Stats">
       <h4 id="StartTyping">{ready && !startedTyping ? "Start Typing!" : "" }</h4>
-      <h5>{typingStats ? `KeyStrokes: ${keystrokes} Length of Characters: ${lengthKeys} ` : "" }</h5>
+      <h5>{typingStats ? `${keystrokes} / ${lengthKeys} :: ${100-((keystrokes/lengthKeys*100)-100)}% Accuracy` : "" }</h5>
     </div>
   );
 }
