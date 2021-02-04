@@ -2,22 +2,28 @@ import React, { useState, useEffect } from "react";
 import TextArea from "./TextArea";
 import PasteType from "./PasteType";
 import Stats from "./Stats";
+import useInterval from 'react-useinterval';
+
 
 let ready = false;
 let startedTyping = false;
 let spaceMode = false;
 let firstSpace = true;
 let pasteText = "";
-let textArr = [];
 
 function App() {
   const [pastedText, setPastedText] = useState("");
   const [readyStats, setReadyStats] = useState(false);
   const [typingStats, setTypingStats] = useState(false);
-  const [keystrokes, setKeystrokes] = useState(0);
+  const [keystrokes, setKeystrokes] = useState(1);
   const [accurateKeystrokes, setAccurateKeystrokes] = useState(0);
   const [lengthKeys, setLengthKeys] = useState(0);
-
+  let [count, setCount] = useState(0);
+    const increaseCount = () => {
+      if(startedTyping && !typingStats)
+        setCount(count+1);
+    };
+     useInterval(increaseCount, 1000, 5);
   const handleText = (e) => setPastedText(e.target.value);
   const setReady = (bool = false) => {
     const textArea = document.querySelector(".pasted");
@@ -30,6 +36,8 @@ function App() {
       textTyper.classList.add("SpaceLeft");
     }
     startedTyping = false;
+    spaceMode = false;
+    theChar.classList.remove("Space");
     ready = bool;
     setLengthKeys(pastedText.length);
     setReadyStats(bool);
@@ -46,7 +54,6 @@ function App() {
     }
     if (!startedTyping) {
       pasteText = pastedText;
-      textArr = pastedText.split("");
       setTypingStats(false);
       setKeystrokes(0);
       setAccurateKeystrokes(0);
@@ -56,9 +63,16 @@ function App() {
 
   const keyHandler = ({ key }) => {
     const theChar = document.getElementById("TheChar");
-    setTypingStats(true);
+    if (theChar.innerText === "end.") {
+    
+        setTypingStats(true);
+        startedTyping = false;
+    }
 
-    console.log(key);
+    if (!startedTyping) {
+      startedTyping = true;
+      document.getElementById("StartTyping").classList.add("end");
+     }
     if (
       key !== "Shift" &&
       key !== "Alt" &&
@@ -75,16 +89,11 @@ function App() {
       key !== "F10" &&
       key !== "F11" &&
       key !== "F12" &&
-      key !== "CapsLock"
+      key !== "CapsLock"&&
+      key !== "BackSpace"
     ) {
-      setKeystrokes((keystroke) => keystroke + 1);
-      const textTyped = document.getElementById("TextTyped");
-      if (key === textTyped.innerText[textTyped.innerText.length - 1]) {
-        setAccurateKeystrokes((keystroke) => keystroke + 1);
-      }
-      if (key === "Space") {
-        setAccurateKeystrokes((keystroke) => keystroke + 1);
-      }
+      if(theChar.innerText !== "end.")
+        setKeystrokes((keystroke) => keystroke + 1);
     }
   };
 
@@ -95,12 +104,11 @@ function App() {
       }
     });
   }, []);
-
   return (
     <div>
       <div>
         <header className="text-center">
-          <h1>pasteType</h1>
+          <h1>p<u>asteT</u>yp<u>e</u></h1>
         </header>
       </div>
       <TextArea handleText={handleText} ready={ready} />
@@ -108,6 +116,9 @@ function App() {
         readyTyper={readyStats}
         setReady={setReady}
         pastedText={pastedText}
+        setKeystrokes={setKeystrokes}
+        setLengthKeys={setLengthKeys}
+        setTime={setCount}
       />
       <Stats
         startedTyping={typingStats}
@@ -116,7 +127,9 @@ function App() {
         accurateKeystrokes={accurateKeystrokes}
         lengthKeys={lengthKeys}
         typingStats={typingStats}
+        seconds={count}
       />
+      <footer className="text-center"><a className="btn" id="tcouncil" href="https://www.tcouncil.dev/" target="_blank">© 2021 Travis Council. All Rights Reserved.</a></footer>
     </div>
   );
 }
@@ -133,12 +146,12 @@ window.addEventListener("keydown", (e) => {
     if (!startedTyping) {
       startedTyping = true;
       document.getElementById("StartTyping").classList.add("end");
-    }
+     }
 
     if (
       textTyper.innerText[0] === undefined &&
       e.key.charCodeAt(0) === theChar.innerText.charCodeAt(0)
-    ) {
+    ){
       theChar.innerText = "end.";
       theChar.classList.add("end");
       document.getElementById("PasteTypeTexter").classList.add("Over");
@@ -197,10 +210,6 @@ window.addEventListener("keydown", (e) => {
         }
       }
     }
-    console.log(`Key: '${e.key}' code = ${e.key.charCodeAt(0)}
-        asking for character '${
-          theChar.innerText[0]
-        }' code = ${theChar.innerText.charCodeAt(0)}`);
   }
 });
 

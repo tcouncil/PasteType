@@ -1,7 +1,7 @@
 import React from "react";
 import "./pasteType.css";
 
-export default function PasteType({ pastedText = "", setReady, readyTyper }) {
+export default function PasteType({ pastedText = "", setReady, readyTyper, setKeystrokes, setLengthKeys, setTime }) {
   const textTyper = document.getElementById("TextTyper");
   const typedText = document.getElementById("TextTyped");
   let pasteText = pastedText;
@@ -13,6 +13,9 @@ export default function PasteType({ pastedText = "", setReady, readyTyper }) {
     document.getElementById("StartTyping").classList.remove("end");
     document.querySelector("body").classList.remove("PlayingBody");
 
+    setTime(0);
+    setKeystrokes(1);
+    setLengthKeys(0);
     setReady(false);
     if (textTyper) {
       pasteText = "";
@@ -24,13 +27,15 @@ export default function PasteType({ pastedText = "", setReady, readyTyper }) {
 
   const handleReady = (e) => {
     setReady(true);
+    setKeystrokes(1);
+    setLengthKeys(length => length = pastedText.trim().length);
     document.getElementById("ReadyButton").classList.add("end");
     document.querySelector("body").classList.add("PlayingBody");
     if (document.querySelector(".pasted").value.length === 0) {
       const theChar = document.getElementById("TheChar");
       theChar.innerText = "i";
-
       document.getElementById("TextTyper").innerText = "nput text!";
+      setLengthKeys(length => length = 11);
     }
   };
 
@@ -47,9 +52,9 @@ export default function PasteType({ pastedText = "", setReady, readyTyper }) {
       <div className="row end" id="PasteTypeTexter">
         <div id="TypedText">
           <code className="col" id="TextTyped" />
-          <mark>
+          
             <code id="TheChar" />
-          </mark>
+  
           <code className="col" id="TextTyper">
             {pasteText}
           </code>
