@@ -4,7 +4,6 @@ import PasteType from "./PasteType";
 import Stats from "./Stats";
 import useInterval from 'react-useinterval';
 
-
 let ready = false;
 let startedTyping = false;
 let spaceMode = false;
@@ -15,7 +14,7 @@ function App() {
   const [pastedText, setPastedText] = useState("");
   const [readyStats, setReadyStats] = useState(false);
   const [typingStats, setTypingStats] = useState(false);
-  const [keystrokes, setKeystrokes] = useState(1);
+  const [keystrokes, setKeystrokes] = useState(0);
   const [accurateKeystrokes, setAccurateKeystrokes] = useState(0);
   const [lengthKeys, setLengthKeys] = useState(0);
   let [count, setCount] = useState(0);
@@ -63,47 +62,123 @@ function App() {
 
   const keyHandler = ({ key }) => {
     const theChar = document.getElementById("TheChar");
+
     if (theChar.innerText === "end.") {
-    
         setTypingStats(true);
         startedTyping = false;
     }
 
     if (!startedTyping) {
-      startedTyping = true;
-      document.getElementById("StartTyping").classList.add("end");
-     }
+        startedTyping = true;
+        document.getElementById("StartTyping").classList.add("end");
+    }
+
     if (
-      key !== "Shift" &&
-      key !== "Alt" &&
-      key !== "Control" &&
-      key !== "F1" &&
-      key !== "F2" &&
-      key !== "F3" &&
-      key !== "F4" &&
-      key !== "F5" &&
-      key !== "F6" &&
-      key !== "F7" &&
-      key !== "F8" &&
-      key !== "F9" &&
-      key !== "F10" &&
-      key !== "F11" &&
-      key !== "F12" &&
-      key !== "CapsLock"&&
-      key !== "BackSpace"
+        key !== "Shift" &&
+        key !== "Alt" &&
+        key !== "Control" &&
+        key !== "F1" &&
+        key !== "F2" &&
+        key !== "F3" &&
+        key !== "F4" &&
+        key !== "F5" &&
+        key !== "F6" &&
+        key !== "F7" &&
+        key !== "F8" &&
+        key !== "F9" &&
+        key !== "F10" &&
+        key !== "F11" &&
+        key !== "F12" &&
+        key !== "CapsLock" &&
+        key !== "BackSpace"
     ) {
-      if(theChar.innerText !== "end.")
-        setKeystrokes((keystroke) => keystroke + 1);
+        if (theChar.innerText !== "end.")
+            setKeystrokes((keystroke) => keystroke + 1);
+    }
+
+    const textTyper = document.getElementById("TextTyper");
+    const textTyped = document.getElementById("TextTyped");
+    if (!startedTyping) {
+        startedTyping = true;
+        document.getElementById("StartTyping").classList.add("end");
+    }
+
+    if (
+        textTyper.innerText[0] === undefined &&
+        key.charCodeAt(0) === theChar.innerText.charCodeAt(0)
+    ) {
+        theChar.innerText = "end.";
+        theChar.classList.add("end");
+        document.getElementById("PasteTypeTexter").classList.add("Over");
+        setTypingStats(true);
+        startedTyping = false;
+
+        return;
+    }
+    if (spaceMode) {
+        if (
+            firstSpace &&
+            key.charCodeAt(0) === theChar.innerText.charCodeAt(0)
+        ) {
+            textTyped.innerText += theChar.innerText;
+            theChar.innerText = "_";
+            theChar.classList.add("Space");
+            textTyper.classList.remove("SpaceLeft");
+            textTyped.classList.remove("SpaceRight");
+            firstSpace = false;
+        }
+        if (key.charCodeAt(0) === 32 && theChar.innerText === "_") {
+            theChar.classList.remove("Space");
+            textTyped.classList.add("SpaceRight");
+            theChar.innerText = textTyper.innerText[0];
+            let nextChar = textTyper.innerText[1];
+            spaceMode = false;
+            firstSpace = true;
+            if (nextChar === " ") {
+                spaceMode = true;
+                theChar.innerText = textTyper.innerText[0];
+                textTyper.classList.add("SpaceLeft");
+            }
+            textTyper.innerText = textTyper.innerText.slice(1);
+        }
+        if (textTyped.innerText.length >= 11) {
+            const textTypedArr = textTyped.innerText.split("");
+            textTypedArr.shift();
+            textTyped.innerText = textTypedArr.join("");
+        }
+    } else {
+        if (key.charCodeAt(0) === theChar.innerText.charCodeAt(0)) {
+            textTyped.classList.remove("SpaceRight");
+            let nextChar = textTyper.innerText[1];
+            textTyped.innerText += theChar.innerText;
+            if (nextChar === " ") {
+                spaceMode = true;
+                theChar.innerText = textTyper.innerText[0];
+                textTyper.classList.add("SpaceLeft");
+            } else {
+                theChar.innerText = textTyper.innerText[0];
+            }
+            textTyper.innerText = textTyper.innerText.slice(1);
+
+            if (theChar === undefined) theChar.innerText = "";
+            if (textTyped.innerText.length >= 11) {
+                const textTypedArr = textTyped.innerText.split("");
+                textTypedArr.shift();
+                textTyped.innerText = textTypedArr.join("");
+            }
+        }
     }
   };
 
   useEffect(() => {
+    document.getElementById("PasteTypeTexter").classList.add('end')
     window.addEventListener("keydown", (e) => {
       if (ready) {
         keyHandler(e);
       }
     });
   }, []);
+
   return (
     <div>
       <div>
@@ -129,88 +204,9 @@ function App() {
         typingStats={typingStats}
         seconds={count}
       />
-      <footer className="text-center"><a className="btn" id="tcouncil" href="https://www.tcouncil.dev/" target="_blank">© 2021 Travis Council. All Rights Reserved.</a></footer>
+      <footer className="text-center"><a className="btn" id="tcouncil" href="https://tcouncil.dev/" target="_blank" rel="noreferrer">2021 • Travis Council</a></footer>
     </div>
   );
 }
-
-window.addEventListener("DOMContentLoaded", (event) => {
-  console.log("DOM fully loaded and parsed");
-});
-
-window.addEventListener("keydown", (e) => {
-  if (ready) {
-    const textTyper = document.getElementById("TextTyper");
-    const textTyped = document.getElementById("TextTyped");
-    const theChar = document.getElementById("TheChar");
-    if (!startedTyping) {
-      startedTyping = true;
-      document.getElementById("StartTyping").classList.add("end");
-     }
-
-    if (
-      textTyper.innerText[0] === undefined &&
-      e.key.charCodeAt(0) === theChar.innerText.charCodeAt(0)
-    ){
-      theChar.innerText = "end.";
-      theChar.classList.add("end");
-      document.getElementById("PasteTypeTexter").classList.add("Over");
-      return;
-    }
-    if (spaceMode) {
-      if (
-        firstSpace &&
-        e.key.charCodeAt(0) === theChar.innerText.charCodeAt(0)
-      ) {
-        textTyped.innerText += theChar.innerText;
-        theChar.innerText = "_";
-        theChar.classList.add("Space");
-        textTyper.classList.remove("SpaceLeft");
-        textTyped.classList.remove("SpaceRight");
-        firstSpace = false;
-      }
-      if (e.key.charCodeAt(0) === 32 && theChar.innerText === "_") {
-        theChar.classList.remove("Space");
-        textTyped.classList.add("SpaceRight");
-        theChar.innerText = textTyper.innerText[0];
-        let nextChar = textTyper.innerText[1];
-        spaceMode = false;
-        firstSpace = true;
-        if (nextChar === " ") {
-          spaceMode = true;
-          theChar.innerText = textTyper.innerText[0];
-          textTyper.classList.add("SpaceLeft");
-        }
-        textTyper.innerText = textTyper.innerText.slice(1);
-      }
-      if (textTyped.innerText.length >= 11) {
-        const textTypedArr = textTyped.innerText.split("");
-        textTypedArr.shift();
-        textTyped.innerText = textTypedArr.join("");
-      }
-    } else {
-      if (e.key.charCodeAt(0) === theChar.innerText.charCodeAt(0)) {
-        textTyped.classList.remove("SpaceRight");
-        let nextChar = textTyper.innerText[1];
-        textTyped.innerText += theChar.innerText;
-        if (nextChar === " ") {
-          spaceMode = true;
-          theChar.innerText = textTyper.innerText[0];
-          textTyper.classList.add("SpaceLeft");
-        } else {
-          theChar.innerText = textTyper.innerText[0];
-        }
-        textTyper.innerText = textTyper.innerText.slice(1);
-
-        if (theChar === undefined) theChar.innerText = "";
-        if (textTyped.innerText.length >= 11) {
-          const textTypedArr = textTyped.innerText.split("");
-          textTypedArr.shift();
-          textTyped.innerText = textTypedArr.join("");
-        }
-      }
-    }
-  }
-});
 
 export default App;
